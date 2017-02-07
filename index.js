@@ -37,9 +37,9 @@ var linkAccountMessage = "Please link your Microsoft account to use this skill."
 // An image cannot be larger than 2 MB
 var responseCardImages = {
     // 720w x 480h
-    smallImageUrl: 'https://imgs.xkcd.com/comics/standards.png',
+    smallImageUrl: 'https://raw.githubusercontent.com/PaulStubbs/nodejs-alexa-connect-sample/master/skill/AlexaGraphBotCard720x480.png',
     // 1200w x 800h
-    largeImageUrl: 'https://imgs.xkcd.com/comics/standards.png'
+    largeImageUrl: 'https://raw.githubusercontent.com/PaulStubbs/nodejs-alexa-connect-sample/master/skill/AlexaGraphBotCard1200x800.png'
 };
 
 // Entry point for Alexa
