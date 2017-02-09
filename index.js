@@ -2,14 +2,14 @@
  * Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
-
-'use strict';
+/*jslint es6 this:true */
+"use strict";
 // Amazon Alexa SDK
 // https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs
 var Alexa = require("alexa-sdk");
 
 // Verify that the Request is Intended for Your Service
-var appId = 'amzn1.ask.skill.277b50fe-a169-455c-935b-a37ceade4757';
+var appId = "amzn1.ask.skill.277b50fe-a169-455c-935b-a37ceade4757";
 
 // Microsoft Graph JavaScript SDK
 // npm install msgraph-sdk-javascript
@@ -37,9 +37,9 @@ var linkAccountMessage = "Please link your Microsoft account to use this skill."
 // An image cannot be larger than 2 MB
 var responseCardImages = {
     // 720w x 480h
-    smallImageUrl: 'https://raw.githubusercontent.com/PaulStubbs/nodejs-alexa-connect-sample/master/skill/AlexaGraphBotCard720x480.png',
+    smallImageUrl: "https://raw.githubusercontent.com/PaulStubbs/nodejs-alexa-connect-sample/master/skill/AlexaGraphBotCard720x480.png",
     // 1200w x 800h
-    largeImageUrl: 'https://raw.githubusercontent.com/PaulStubbs/nodejs-alexa-connect-sample/master/skill/AlexaGraphBotCard1200x800.png'
+    largeImageUrl: "https://raw.githubusercontent.com/PaulStubbs/nodejs-alexa-connect-sample/master/skill/AlexaGraphBotCard1200x800.png"
 };
 
 // Entry point for Alexa
@@ -72,57 +72,54 @@ exports.handler = function(event, context, callback) {
 
     } else {
         //no token! display card and let user know they need to sign in
-        var speechOutput = linkAccountMessage
-        alexa.emit(':tellWithLinkAccountCard', speechOutput);
+        var speechOutput = linkAccountMessage;
+        alexa.emit(":tellWithLinkAccountCard", speechOutput);
     }
 };
 
 
 var handlers = {
-    'LaunchRequest': function () {
-        console.log('LaunchRequest');
+    "LaunchRequest": function () {
+        console.log("LaunchRequest");
         var speechOutput = "Welcome to Graph Bot." + HelpMessage;
-        var repromptSpeech = HelpMessage;      
-        this.emit(':ask', speechOutput, repromptSpeech);
+        var repromptSpeech = HelpMessage;
+        this.emit(":ask", speechOutput, repromptSpeech);
     },
-    'SendMailIntent': function () {   
-        console.log('SendMailIntent');
+    "SendMailIntent": function () {
+        console.log("SendMailIntent");
 
         SendMailIntent(this);
 
     },
     "AMAZON.StopIntent": function() {
-        console.log('StopIntent');
-        var speechOutput = shutdownMessage
-        this.emit(':tell', speechOutput);  
+        console.log("StopIntent");
+        var speechOutput = shutdownMessage;
+        this.emit(":tell", speechOutput);
     },
     // Let the user completely exit the skill
     "AMAZON.CancelIntent": function() {
-        console.log('CancelIntent');
-        this.emit(':tell', shutdownMessage);  
+        console.log("CancelIntent");
+        this.emit(":tell", shutdownMessage);
     },
-    // Provide help about how to use the skill 
+    // Provide help about how to use the skill
     "AMAZON.HelpIntent": function () {
-        console.log('HelpIntent');
+        console.log("HelpIntent");
         var speechOutput = HelpMessage;
         var repromptSpeech = HelpMessage;
-        var cardTitle = 'Graph Bot Help';
-        var cardContent = 'Visit http://GitHub.com/paulstubbs/ for more info.';
-        this.emit(':askWithCard', speechOutput, repromptSpeech, cardTitle, cardContent, responseCardImages);
+        var cardTitle = "Graph Bot Help";
+        var cardContent = "Visit http://GitHub.com/paulstubbs/ for more info.";
+        this.emit(":askWithCard", speechOutput, repromptSpeech, cardTitle, cardContent, responseCardImages);
     },
     // Catch everything else
-    'Unhandled': function () {
-        console.log('Unhandled Intent');
+    "Unhandled": function () {
+        console.log("Unhandled Intent");
         var speechOutput = HelpMessage;
         var repromptSpeech = HelpMessage;
-        this.emit(':ask', speechOutput, repromptSpeech);
+        this.emit(":ask", speechOutput, repromptSpeech);
     }
 };
 
 function SendMailIntent(alexaResponse){
-        
-        //var alexaResponse = this;
-
         // get the authenticated user info
         getUser(alexaResponse)
         // **
@@ -132,30 +129,29 @@ function SendMailIntent(alexaResponse){
         })
         .then(function(user){
             // then send a mail to the current user
-            return sendMail(user)
+            return sendMail(user);
         })
         // **
         // handle the sendMail results
         .catch(function(err){
             console.log("sendMail Error: " + JSON.stringify(err));
-            alexaResponse.emit(':tell', "There was an error sending the mail");
+            alexaResponse.emit(":tell", "There was an error sending the mail");
         })
         .then(function(mail){
             // then send confirmation back to alexa
             var mailSubject = mail.Message.Subject;
             console.log("Mail Sent: " + JSON.stringify(mail));
             //return the results to Alexa
-            //return alexaResponse.emit(':tell', "Mail Sent to you.");
-            return alexaResponse.emit(':tell', "Mail sent to you with a subject of " + mailSubject);
+            //return alexaResponse.emit(":tell", "Mail Sent to you.");
+            return alexaResponse.emit(":tell", "Mail sent to you with a subject of " + mailSubject);
         })
 }
 
 function getUser(){
-        
     //Make a call to the Graph API
     return client
-            .api('/me')
-            .get();  
+            .api("/me")
+            .get();
 }
 
 function sendMail(user){
@@ -172,7 +168,7 @@ function sendMail(user){
 
     //Make a call to the Graph API
     client
-        .api('/me/sendMail')
+        .api("/me/sendMail")
         .post({message: mail.Message}, (err, res) => {
             if(err){
                 console.log("sendMail Error: " + JSON.stringify(err));

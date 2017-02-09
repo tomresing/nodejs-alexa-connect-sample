@@ -1,66 +1,103 @@
 {
-    "skill":{
-        "inforamtion":{
-            "skilltype": "Custom",
-            "language": "English (US)",
-            "name": "Graph Bot",
-            "invocation-name": "graph bot",
-            "audio-player": "no"
+  "skill": {
+    "inforamtion": {
+      "skilltype": "Custom",
+      "language": "English (US)",
+      "name": "Graph Bot",
+      "invocation-name": "graph bot",
+      "audio-player": "no"
+    },
+    "interaction-model": {
+      "intent-schema": "intents.json",
+      "custom-slot-types": "slots.txt",
+      "sample-utterances": "utterances.txt"
+    },
+    "configuration": {
+      "service-endpoint-type": "AWS Lambda ARN",
+      "geographical-region": [
+        {
+          "region": "North America",
+          "endpoint": "arn:aws:lambda:us-east-1:906973470133:function:AlexaNodeConnectSample"
         },
-        "interaction-model":{
-            "intent-schema": "intents.json",
-            "custom-slot-types": "slots.txt",
-            "sample-utterances": "utterances.txt"
-        },
-        "configuration":{
-            "service-endpoint-type": "AWS Lambda ARN",
-            "geographical-region":[
-                {"region": "North America", "endpoint":"arn:aws:lambda:us-east-1:906973470133:function:AlexaNodeConnectSample"},
-                {"region": "Europe", "endpoint": "Put Europe ARN Here"}
-            ],
-            "allow-account-linking": "yes",
-            "authorization-url": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
-            "client-id": "1ba0189f-e183-44b8-a16c-c7378ef2da2a",
-            "domain-list":[
-                {"domain-url":"login.live.com"},
-                {"domain-url":"login.windows.net"},
-                {"domain-url":"login.microsoftonline.com"},
-                {"domain-url":"login-us.microsoftonline.com"},
-                {"domain-url":"login.chinacloudapi.cn"},
-                {"domain-url":"login.microsoftonline.de"},
-                {"domain-url":"msft.sts.microsoft.com"}
-            ],
-            "scopes":[
-                {"scope": "offline_access"},
-                {"scope": "user.read"},
-                {"scope": "mail.read"},
-                {"scope": "mail.send"}                
-            ],
-            "redirect-urls":[
-                {"redirection-endpoint": "https://layla.amazon.com/api/skill/link/MOVJWTOKBT5P0"},
-                {"redirection-endpoint": "https://pitangui.amazon.com/api/skill/link/MOVJWTOKBT5P0"}                
-            ],
-            "authorization-grant-type": "Auth Code Grant",
-            "access-token-uri": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
-            "client-secret": "put AAD secret here",
-            "client-authentication-scheme": "Credentials in request body",
-            "privacy-policy-url": "https://privacy.microsoft.com/en-us/privacystatement"
-
-        },
-        "publishing-information":{
-            "category": "Business & Finance",
-            "testing-instructions": "special instructions to test your skill",
-            "countries-region": "In all countries and regions where Amazon distributes skills",
-            "short-skill-description": "Demonstrates how to use Amazon Alexa to send email using the Microsoft Graph and Azure AD.",
-            "full-skill-description": "This sample project demonstrates how to use Amazon Alexa to send email using the Microsoft Graph JavaScript SDK to work with data returned by Microsoft Graph. This sample creates a custom Alexa skill which will allow you to use your voice to interact with Microsoft Graph.",
-            "example-phrases":[
-                {"phrase": "Alexa, Ask Graph Bot to Send Mail"},
-                {"phrase": "Alexa, Tell Graph Bot to Send a test message"},
-                {"phrase": "Alexa, Ask Graph Bot to Send me mail"}
-            ],
-            "keywords": "Microsoft, Graph, Azure, Office",
-            "small-icon": "AlexaGraphBotLogo108x108.png",
-            "large-icon": "AlexaGraphBotLogo512x512.png"
+        {
+          "region": "Europe",
+          "endpoint": "Put Europe ARN Here"
         }
+      ],
+      "allow-account-linking": "yes",
+      "authorization-url": "https:\/\/login.microsoftonline.com\/common\/oauth2\/v2.0\/authorize",
+      "client-id": "1ba0189f-e183-44b8-a16c-c7378ef2da2a",
+      "domain-list": [
+        {
+          "domain-url": "login.live.com"
+        },
+        {
+          "domain-url": "login.windows.net"
+        },
+        {
+          "domain-url": "login.microsoftonline.com"
+        },
+        {
+          "domain-url": "login-us.microsoftonline.com"
+        },
+        {
+          "domain-url": "login.chinacloudapi.cn"
+        },
+        {
+          "domain-url": "login.microsoftonline.de"
+        },
+        {
+          "domain-url": "msft.sts.microsoft.com"
+        }
+      ],
+      "scopes": [
+        {
+          "scope": "offline_access"
+        },
+        {
+          "scope": "user.read"
+        },
+        {
+          "scope": "mail.read"
+        },
+        {
+          "scope": "mail.send"
+        }
+      ],
+      "redirect-urls": [
+        {
+          "redirection-endpoint": "https:\/\/layla.amazon.com\/api\/skill\/link\/MOVJWTOKBT5P0"
+        },
+        {
+          "redirection-endpoint": "https:\/\/pitangui.amazon.com\/api\/skill\/link\/MOVJWTOKBT5P0"
+        }
+      ],
+      "authorization-grant-type": "Auth Code Grant",
+      "access-token-uri": "https:\/\/login.microsoftonline.com\/common\/oauth2\/v2.0\/token",
+      "client-secret": "put AAD secret here",
+      "client-authentication-scheme": "Credentials in request body",
+      "privacy-policy-url": "https:\/\/privacy.microsoft.com\/en-us\/privacystatement"
+    },
+    "publishing-information": {
+      "category": "Business & Finance",
+      "testing-instructions": "special instructions to test your skill",
+      "countries-region": "In all countries and regions where Amazon distributes skills",
+      "short-skill-description": "Demonstrates how to use\u00a0Amazon Alexa\u00a0to send email using the\u00a0Microsoft Graph and Azure AD.",
+      "full-skill-description": "This sample project demonstrates how to use\u00a0Amazon Alexa\u00a0to send email using the\u00a0Microsoft Graph JavaScript SDK\u00a0to work with data returned by Microsoft Graph. This sample creates a custom Alexa skill which will allow you to use your voice to interact with Microsoft Graph.",
+      "example-phrases": [
+        {
+          "phrase": "Alexa, Ask Graph Bot to Send Mail"
+        },
+        {
+          "phrase": "Alexa, Tell Graph Bot to Send a test message"
+        },
+        {
+          "phrase": "Alexa, Ask Graph Bot to Send me mail"
+        }
+      ],
+      "keywords": "Microsoft, Graph, Azure, Office",
+      "small-icon": "AlexaGraphBotLogo108x108.png",
+      "large-icon": "AlexaGraphBotLogo512x512.png"
     }
+  }
 }

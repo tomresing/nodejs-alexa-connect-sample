@@ -52,10 +52,10 @@ In this sample, the bot is written in Node.js. To prepare the code package for d
 4. Prepare the node package for deployment by zipping the source files. On the Mac using the terminal, run the following command from the folder containing the index.js. On Windows use the File Explorer content menu to send to a compressed folder.
 
 
-  > ***Note***: There is a period at the end of the zip command.
+  > ***Note***: The zip file will only contain the index.js at the root and the node_modules folder, which contains all the npm packages.
 
 	```
-	zip -r GraphAlexaConnectSample.zip .
+	zip -r GraphAlexaConnectSample.zip index.js node_modules/
 	```
 	
 In the [Deploy the Skill](#deploy) section you will learn how to deploy this node zip package to a hosting provider, like AWS Lambda.
