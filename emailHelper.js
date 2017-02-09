@@ -20,8 +20,8 @@ var emailContent = (function () {/*
 <body style='font-family:calibri'>
   <h2>Congratulations!</h2>
 
-  <p>This is a message from the Microsoft Graph Alexa Connect Skill Sample. You are well
-  on your way to incorporating Microsoft Graph endpoints in your apps.</p>
+  <p>This is a message from the <a href='https://github.com/PaulStubbs/nodejs-alexa-connect-sample'>Microsoft Graph Alexa Connect Skill Sample</a>. 
+  You are well on your way to incorporating Microsoft Graph endpoints in your apps.</p>
 
   <h3>What's next?</h3>
 
@@ -44,7 +44,7 @@ var emailContent = (function () {/*
   <h3>Give us feedback</h3>
 
   <p>If you have any trouble running this sample, please <a href=
-  'https://github.com/microsoftgraph/alexa-node-connect-rest-sample/issues'>log an issue</a> on
+  'https://github.com/PaulStubbs/nodejs-alexa-connect-sample/issues'>log an issue</a> on
   our repository.</p>
 
   <p>For general questions about the Microsoft Graph API, post to <a href=
@@ -59,13 +59,13 @@ var emailContent = (function () {/*
       <tbody>
         <tr>
           <td><a href=
-          'https://github.com/microsoftgraph/alexa-node-connect-rest-sample'>See on
+          'https://github.com/PaulStubbs/nodejs-alexa-connect-sample'>See on
           GitHub</a></td>
 
           <td><a href='https://office365.uservoice.com'>Suggest on UserVoice</a></td>
 
           <td><a href=
-          'https://twitter.com/share?text=I%20just%20started%20developing%20skills%20for%20%23AmazonAlexa%20using%20the%20%23MicrosoftGraph%20Connect%20sample%20%40OfficeDev%20%40AlexaDev&amp;url=https://github.com/microsoftgraph/alexa-node-connect-rest-sample'>
+          'https://twitter.com/share?text=I%20just%20started%20developing%20skills%20for%20%23AmazonAlexa%20using%20the%20%23MicrosoftGraph%20Connect%20sample%20%40OfficeDev%20%40AlexaDev&amp;url=https://github.com/PaulStubbs/nodejs-alexa-connect-sample'>
           Share on Twitter</a></td>
         </tr>
       </tbody>

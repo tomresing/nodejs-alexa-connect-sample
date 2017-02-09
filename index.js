@@ -22,10 +22,14 @@ var emailHelper = require("./emailHelper.js");
 var client = {};
 
 // Message when the skill is first called
-var welcomeMessage = "Welcome to Graph Bot. Graph Bot can send you an email by saying, Send me mail. What would you like? ";
+var WelcomeMessage = "Welcome to Graph Bot. . Here are some things you can say. . . Send Mail . . Send a test message . . or Send me mail";
+var WelcomeMessageCard = 'Here are some things you can say:/n/n "Send Mail" /n "Send a test message" /n "Send me mail"';
+var WelcomeMessageCardTitle = "Welcome to Graph Bot"
 
 // Message for help intent
-var HelpMessage = "Here are some things you can say: Send Mail. Send a test message. or Send me mail";
+var HelpMessage = "Here are some things you can say. . . Send Mail . . Send a test message . . or Send me mail";
+var HelpMessageCard = 'Here are some things you can say:/n/n "Send Mail" /n "Send a test message" /n "Send me mail"';
+var HelpMessageCardTitle = "Graph Bot Help"
 
 // Used to tell user skill is closing
 var shutdownMessage = "Ok see you again soon.";
@@ -81,9 +85,16 @@ exports.handler = function(event, context, callback) {
 var handlers = {
     "LaunchRequest": function () {
         console.log("LaunchRequest");
-        var speechOutput = "Welcome to Graph Bot." + HelpMessage;
-        var repromptSpeech = HelpMessage;
-        this.emit(":ask", speechOutput, repromptSpeech);
+        var speechOutput = WelcomeMessage;
+        var repromptSpeech = WelcomeMessage;
+        var cardTitle = WelcomeMessageCardTitle;
+        var cardContent = WelcomeMessageCard;
+        this.emit(":askWithCard", speechOutput, repromptSpeech, cardTitle, cardContent, responseCardImages);
+    },
+    "SessionEndedRequest": function () {
+        console.log("SessionEndedRequest");
+        var speechOutput = shutdownMessage;
+        this.emit(":tell", speechOutput);
     },
     "SendMailIntent": function () {
         console.log("SendMailIntent");
@@ -106,8 +117,8 @@ var handlers = {
         console.log("HelpIntent");
         var speechOutput = HelpMessage;
         var repromptSpeech = HelpMessage;
-        var cardTitle = "Graph Bot Help";
-        var cardContent = "Visit http://GitHub.com/paulstubbs/ for more info.";
+        var cardTitle = HelpMessageCardTitle;
+        var cardContent = HelpMessageCard;
         this.emit(":askWithCard", speechOutput, repromptSpeech, cardTitle, cardContent, responseCardImages);
     },
     // Catch everything else
