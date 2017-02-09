@@ -1,0 +1,16 @@
+{
+  "name": "alexa-node-connect-rest-sample",
+  "version": "1.0.0",
+  "description": "Microsoft Graph Connect Sample for Amazon Alexa",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Microsoft",
+  "license": "MIT",
+  "dependencies": {
+    "alexa-sdk": "^1.0.6",
+    "msgraph-sdk-javascript": "0.3.1"
+  }
+}
+
