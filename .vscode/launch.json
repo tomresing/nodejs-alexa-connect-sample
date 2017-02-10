@@ -1,7 +1,6 @@
 {
     "version": "0.2.0",
     "configurations": [
-
         {
             "name": "Launch",
             "type": "node",
@@ -20,8 +19,7 @@
                 "ApplicationID": "amzn1.ask.skill.b1f438ec-284c-4bb4-ae35-9f198083aeec"
             },
             "console": "internalConsole",
-            "sourceMaps": false,
-            "outDir": null
+            "sourceMaps": false
         }
     ]
 }
