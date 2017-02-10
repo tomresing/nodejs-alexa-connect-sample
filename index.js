@@ -4,12 +4,17 @@
  */
 /*jslint es6 this:true */
 "use strict";
+
+
+// Load any undefined ENV variables form a specified file.
+// Used mostly for debugging locally
+// When running in lambda these will come from the service
+var env = require('node-env-file'); 
+env(__dirname + '/.env');
+
 // Amazon Alexa SDK
 // https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs
 var Alexa = require("alexa-sdk");
-
-// Verify that the Request is Intended for Your Service
-var appId = "amzn1.ask.skill.277b50fe-a169-455c-935b-a37ceade4757";
 
 // Microsoft Graph JavaScript SDK
 // npm install msgraph-sdk-javascript
@@ -23,12 +28,12 @@ var client = {};
 
 // Message when the skill is first called
 var WelcomeMessage = "Welcome to Graph Bot. . Here are some things you can say. . . Send Mail . . Send a test message . . or Send me mail";
-var WelcomeMessageCard = 'Here are some things you can say:/n/n "Send Mail" /n "Send a test message" /n "Send me mail"';
+var WelcomeMessageCard = 'Here are some things you can say:\n\n "Send Mail" \n "Send a test message" \n "Send me mail"';
 var WelcomeMessageCardTitle = "Welcome to Graph Bot"
 
 // Message for help intent
 var HelpMessage = "Here are some things you can say. . . Send Mail . . Send a test message . . or Send me mail";
-var HelpMessageCard = 'Here are some things you can say:/n/n "Send Mail" /n "Send a test message" /n "Send me mail"';
+var HelpMessageCard = 'Here are some things you can say:\n\n "Send Mail" \n "Send a test message" \n "Send me mail"';
 var HelpMessageCardTitle = "Graph Bot Help"
 
 // Used to tell user skill is closing
@@ -49,8 +54,14 @@ var responseCardImages = {
 // Entry point for Alexa
 exports.handler = function(event, context, callback) {
 
+    console.log(process.env)
+
     // DEBUG: return the Node version info
     console.log(process.versions);
+
+    // Verify that the Request is Intended for Your Service
+    // This value is set on the server or in the .env file
+    var appId = process.env.ApplicationId;
 
     var alexa = Alexa.handler(event, context);
     alexa.appId = appId;

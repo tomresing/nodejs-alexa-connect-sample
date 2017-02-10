@@ -25,7 +25,7 @@
         }
       ],
       "allow-account-linking": "yes",
-      "authorization-url": "https:\/\/login.microsoftonline.com\/common\/oauth2\/v2.0\/authorize",
+      "authorization-url": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
       "client-id": "1ba0189f-e183-44b8-a16c-c7378ef2da2a",
       "domain-list": [
         {
@@ -66,17 +66,17 @@
       ],
       "redirect-urls": [
         {
-          "redirection-endpoint": "https:\/\/layla.amazon.com\/api\/skill\/link\/MOVJWTOKBT5P0"
+          "redirection-endpoint": "https://layla.amazon.com/api/skill/link/MOVJWTOKBT5P0"
         },
         {
-          "redirection-endpoint": "https:\/\/pitangui.amazon.com\/api\/skill\/link\/MOVJWTOKBT5P0"
+          "redirection-endpoint": "https://pitangui.amazon.com/api/skill/link/MOVJWTOKBT5P0"
         }
       ],
       "authorization-grant-type": "Auth Code Grant",
-      "access-token-uri": "https:\/\/login.microsoftonline.com\/common\/oauth2\/v2.0\/token",
+      "access-token-uri": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
       "client-secret": "put AAD secret here",
       "client-authentication-scheme": "Credentials in request body",
-      "privacy-policy-url": "https:\/\/privacy.microsoft.com\/en-us\/privacystatement"
+      "privacy-policy-url": "https://privacy.microsoft.com/en-us/privacystatement"
     },
     "publishing-information": {
       "category": "Business & Finance",
