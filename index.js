@@ -5,15 +5,6 @@
 /*jslint es6 this:true */
 "use strict";
 
-
-// Load any undefined ENV variables form a specified file.
-// Used mostly for debugging locally
-// When running in lambda these will come from the service
-if(process.env.NODE_ENV === 'development'){
-    var env = require('node-env-file'); 
-    console.log("envLength:" + env.length);
-    env(__dirname + '/.env');
-}
 // Amazon Alexa SDK
 // https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs
 var Alexa = require("alexa-sdk");
@@ -58,12 +49,12 @@ exports.handler = function(event, context, callback) {
 
     // DEBUG: return all the environment varibles
     console.log(process.env)
-
     // DEBUG: return the Node version info
     console.log(process.versions);
 
     // Verify that the Request is Intended for Your Service
     // This value is set on the server or in the .env file
+    // SETUP NOTE: Add Lambda Environment Variable called ApplicationId
     var appId = process.env.ApplicationId;
 
     var alexa = Alexa.handler(event, context);
@@ -192,6 +183,10 @@ function sendMail(user){
         displayName,
         destinationEmailAddress
     );
+
+    //DEBUG: log the user
+    console.log("displayName: " + displayName + 
+                " destinationEmailAddress: " + destinationEmailAddress); 
 
     //Make a call to the Graph API
     client

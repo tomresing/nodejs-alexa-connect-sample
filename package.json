@@ -10,8 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "alexa-sdk": "^1.0.6",
-    "msgraph-sdk-javascript": "0.3.1",
-    "node-env-file": "^0.1.8"
+    "msgraph-sdk-javascript": "0.3.1"
   }
 }
 
