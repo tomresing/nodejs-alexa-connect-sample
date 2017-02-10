@@ -9,9 +9,11 @@
 // Load any undefined ENV variables form a specified file.
 // Used mostly for debugging locally
 // When running in lambda these will come from the service
-var env = require('node-env-file'); 
-env(__dirname + '/.env');
-
+if(process.env.NODE_ENV === 'development'){
+    var env = require('node-env-file'); 
+    console.log("envLength:" + env.length);
+    env(__dirname + '/.env');
+}
 // Amazon Alexa SDK
 // https://github.com/alexa/alexa-skills-kit-sdk-for-nodejs
 var Alexa = require("alexa-sdk");
@@ -54,6 +56,7 @@ var responseCardImages = {
 // Entry point for Alexa
 exports.handler = function(event, context, callback) {
 
+    // DEBUG: return all the environment varibles
     console.log(process.env)
 
     // DEBUG: return the Node version info
@@ -73,9 +76,9 @@ exports.handler = function(event, context, callback) {
 
     // validate the Auth Token
     if (token) {
-        //has a token
-        // Initialize the Microsoft Graph client
+        // TODO: validate the token
 
+        // Initialize the Microsoft Graph client
         client = MicrosoftGraph.Client.init({
             authProvider: (done) => {
                 done(null, token);
@@ -86,7 +89,9 @@ exports.handler = function(event, context, callback) {
         alexa.execute();
 
     } else {
-        //no token! display card and let user know they need to sign in
+
+        // DEBUG: no token! display card and let user know they need to sign in
+        console.log("No Token");
         var speechOutput = linkAccountMessage;
         alexa.emit(":tellWithLinkAccountCard", speechOutput);
     }
