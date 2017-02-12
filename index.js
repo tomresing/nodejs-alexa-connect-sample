@@ -44,13 +44,27 @@ var responseCardImages = {
     largeImageUrl: "https://raw.githubusercontent.com/PaulStubbs/nodejs-alexa-connect-sample/master/skill/AlexaGraphBotCard1200x800.png"
 };
 
+// Adding structured logging
+const logLevels = {error: 4, warn: 3, info: 2, verbose: 1, debug: 0};
+
+// get the current log level from the current environment if set, else set to info
+const currLogLevel = process.env.LOG_LEVEL != null ? process.env.LOG_LEVEL : 'info';
+
+// print the log statement, only if the requested log level is greater than the current log level
+function log(logLevel, statement) {
+    if(logLevels[logLevel] >= logLevels[currLogLevel] ) {
+        console.log(statement);
+    }
+}
+
+
 // Entry point for Alexa
 exports.handler = function(event, context, callback) {
 
     // DEBUG: return all the environment varibles
-    console.log(process.env)
+    log("info", process.env)
     // DEBUG: return the Node version info
-    console.log(process.versions);
+    log("info", process.versions);
 
     // Verify that the Request is Intended for Your Service
     // This value is set on the server or in the .env file
@@ -63,7 +77,7 @@ exports.handler = function(event, context, callback) {
 
     // Get the OAuth 2.0 Bearer Token from the linked account
     var token = event.session.user.accessToken;
-    console.log("AuthToken: " + token);
+    log("debug", "AuthToken: " + token);
 
     // validate the Auth Token
     if (token) {
@@ -82,7 +96,7 @@ exports.handler = function(event, context, callback) {
     } else {
 
         // DEBUG: no token! display card and let user know they need to sign in
-        console.log("No Token");
+        log("warn", "No Token");
         var speechOutput = linkAccountMessage;
         alexa.emit(":tellWithLinkAccountCard", speechOutput);
     }
@@ -91,7 +105,7 @@ exports.handler = function(event, context, callback) {
 
 var handlers = {
     "LaunchRequest": function () {
-        console.log("LaunchRequest");
+        log("info", "LaunchRequest");
         var speechOutput = WelcomeMessage;
         var repromptSpeech = WelcomeMessage;
         var cardTitle = WelcomeMessageCardTitle;
@@ -99,29 +113,29 @@ var handlers = {
         this.emit(":askWithCard", speechOutput, repromptSpeech, cardTitle, cardContent, responseCardImages);
     },
     "SessionEndedRequest": function () {
-        console.log("SessionEndedRequest");
+        log("info", "SessionEndedRequest");
         var speechOutput = shutdownMessage;
         this.emit(":tell", speechOutput);
     },
     "SendMailIntent": function () {
-        console.log("SendMailIntent");
+        log("info", "SendMailIntent");
 
         SendMailIntent(this);
 
     },
     "AMAZON.StopIntent": function() {
-        console.log("StopIntent");
+        log("info", "StopIntent");
         var speechOutput = shutdownMessage;
         this.emit(":tell", speechOutput);
     },
     // Let the user completely exit the skill
     "AMAZON.CancelIntent": function() {
-        console.log("CancelIntent");
+        log("info", "CancelIntent");
         this.emit(":tell", shutdownMessage);
     },
     // Provide help about how to use the skill
     "AMAZON.HelpIntent": function () {
-        console.log("HelpIntent");
+        log("info", "HelpIntent");
         var speechOutput = HelpMessage;
         var repromptSpeech = HelpMessage;
         var cardTitle = HelpMessageCardTitle;
@@ -130,7 +144,7 @@ var handlers = {
     },
     // Catch everything else
     "Unhandled": function () {
-        console.log("Unhandled Intent");
+        log("error", "Unhandled Intent");
         var speechOutput = HelpMessage;
         var repromptSpeech = HelpMessage;
         this.emit(":ask", speechOutput, repromptSpeech);
@@ -143,22 +157,23 @@ function SendMailIntent(alexaResponse){
         // **
         // handle the getUser results
         .catch(function(err){
-            console.log("getUser Error: " + JSON.stringify(err));
+            log("error", "getUser Error: " + JSON.stringify(err));
         })
         .then(function(user){
+            log("info", "user: " + user.displayName + " , email: " + user.user.userPrincipalName);
             // then send a mail to the current user
             return sendMail(user);
         })
         // **
         // handle the sendMail results
         .catch(function(err){
-            console.log("sendMail Error: " + JSON.stringify(err));
+            log("error", "sendMail Error: " + JSON.stringify(err));
             alexaResponse.emit(":tell", "There was an error sending the mail");
         })
         .then(function(mail){
             // then send confirmation back to alexa
             var mailSubject = mail.Message.Subject;
-            console.log("Mail Sent: " + JSON.stringify(mail));
+            log("debug", "Mail Sent: " + JSON.stringify(mail));
             //return the results to Alexa
             //return alexaResponse.emit(":tell", "Mail Sent to you.");
             return alexaResponse.emit(":tell", "Mail sent to you with a subject of " + mailSubject);
@@ -185,7 +200,7 @@ function sendMail(user){
     );
 
     //DEBUG: log the user
-    console.log("displayName: " + displayName + 
+    log("debug", "displayName: " + displayName + 
                 " destinationEmailAddress: " + destinationEmailAddress); 
 
     //Make a call to the Graph API
@@ -193,11 +208,11 @@ function sendMail(user){
         .api("/me/sendMail")
         .post({message: mail.Message}, (err, res) => {
             if(err){
-                console.log("sendMail Error: " + JSON.stringify(err));
+                log("error", "sendMail Error: " + JSON.stringify(err));
                 reject(err);
             }else{
                 // log the sendMail results
-                console.log("sendMail successful: ");
+                log("info", "sendMail successful: ");
                 // return the mail that was sent
                 resolve(mail);
             }
