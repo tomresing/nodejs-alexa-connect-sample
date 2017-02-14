@@ -221,7 +221,10 @@ Authentication for Alexa skills are handled using account linking. When your ski
   > ***Note***: At this point you will need to jump out to the [Register an application](#registerApp) section of this readme. You will basically need to do these two sections in parallel. Open a new browser window to make it easy to switch back and forth.
 
 
-2. Set **Authorization URL** to _https://login.microsoftonline.com/common/oauth2/v2.0/authorize_
+2. Set **Authorization URL** to _https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?msafed=0_
+
+	> ***Note***: This authorization url will allow only work or school accounts. There is currently an issue in AD where all MSA accounts are not supportted. If you want to allow both work or school accounts and MSA accounts use this endpoint: _https://login.microsoftonline.com/common/oauth2/v2.0/authorize_.
+
 3. **Client Id** will be the value of your **Application Id** from the Microsoft Application Registration Portal, as described in the [Register an application](#registerApp) section.
 4. Enter URLs for each domain in your authentication flow. For example here are the ones to login in using my corporate credentials or my Microsoft Account (MSA),like hotmail, credentials. I have also included the URLs for the Chinese and German Azure datacenters. If you are using a custom domain you will need to add those as well. Enter the following domain URLs for the whitelist.
 	- login.live.com
@@ -241,7 +244,10 @@ Authentication for Alexa skills are handled using account linking. When your ski
 
 6. Copy a Redirect URL into your Azure AD skill registion that you completed earlier. 
 6. Set **Authorization Grant Type** to _Auth Code Grant_.
-7. Set **Access Token URI** to _https://login.microsoftonline.com/common/oauth2/v2.0/token_
+7. Set **Access Token URI** to _https://login.microsoftonline.com/organizations/oauth2/v2.0/token?msafed=0_
+
+	> ***Note***: This authorization url will allow only work or school accounts. There is currently an issue in AD where all MSA accounts are not supportted. If you want to allow both work or school accounts and MSA accounts use this endpoint: _https://login.microsoftonline.com/common/oauth2/v2.0/token_.
+	
 8. The **Client Secret** will be the secret generated in the [Register an app in Azure AD](#registerApp) section.
 9. Set the **Client Authentication Scheme** to _Credentials in the request body_. 
 
