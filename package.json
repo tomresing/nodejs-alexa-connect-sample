@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "alexa-sdk": "^1.0.6",
-    "msgraph-sdk-javascript": "0.3.1"
+    "msgraph-sdk-javascript": "0.3.1",
+    "voice-insights-sdk": "^1.2.2"
   }
 }
-

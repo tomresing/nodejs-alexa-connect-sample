@@ -18,7 +18,8 @@
             "env": {
                 "NODE_ENV": "development",
                 "LOG_LEVEL": "debug",
-                "ApplicationID": "amzn1.ask.skill.b1f438ec-284c-4bb4-ae35-9f198083aeec"
+                "ApplicationId": "amzn1.ask.skill.b1f438ec-284c-4bb4-ae35-9f198083aeec",
+                "VI_APP_TOKEN": "dfe4cfe0-c640-11a6-1aad-02ddc10e4a8b"
             },
             "console": "internalConsole",
             "sourceMaps": false
