@@ -44,13 +44,37 @@ var responseCardImages = {
     largeImageUrl: "https://raw.githubusercontent.com/PaulStubbs/nodejs-alexa-connect-sample/master/skill/AlexaGraphBotCard1200x800.png"
 };
 
+// Adding logging levels
+// error -  Other runtime errors or unexpected conditions. 
+// warn -   'Almost' errors, other runtime situations that are undesirable 
+//          or unexpected, but not necessarily "wrong".
+// info -   Interesting runtime events (startup/shutdown/Intents). 
+// debug -  Detailed information on the flow through the system. 
+var logLevels = {error: 3, warn: 2, info: 1, debug: 0};
+
+// get the current log level from the current environment if set, else set to info
+var currLogLevel = process.env.LOG_LEVEL != null ? process.env.LOG_LEVEL : 'info';
+
+// print the log statement, only if the requested log level is greater than the current log level
+function log(statement, logLevel) {
+
+    // no loglevel, set to debug
+    if(!logLevel){
+        logLevel = logLevels.debug;
+    }
+    // output log if greater then log level
+    if(logLevel >= logLevels[currLogLevel] ) {
+        console.log(statement);
+    }
+}
+
 // Entry point for Alexa
 exports.handler = function(event, context, callback) {
 
     // DEBUG: return all the environment varibles
-    console.log(process.env)
+    log(process.env, logLevels.debug);
     // DEBUG: return the Node version info
-    console.log(process.versions);
+    log(process.versions, logLevels.debug);
 
     // Verify that the Request is Intended for Your Service
     // This value is set on the server or in the .env file
@@ -63,10 +87,10 @@ exports.handler = function(event, context, callback) {
 
     // Get the OAuth 2.0 Bearer Token from the linked account
     var token = event.session.user.accessToken;
-    console.log("AuthToken: " + token);
 
     // validate the Auth Token
     if (token) {
+        log("Auth Token: " + token, logLevels.debug);
         // TODO: validate the token
 
         // Initialize the Microsoft Graph client
@@ -80,9 +104,8 @@ exports.handler = function(event, context, callback) {
         alexa.execute();
 
     } else {
-
-        // DEBUG: no token! display card and let user know they need to sign in
-        console.log("No Token");
+        // no token! display card and let user know they need to sign in
+        log("No Auth Token", logLevels.warn);
         var speechOutput = linkAccountMessage;
         alexa.emit(":tellWithLinkAccountCard", speechOutput);
     }
@@ -91,7 +114,7 @@ exports.handler = function(event, context, callback) {
 
 var handlers = {
     "LaunchRequest": function () {
-        console.log("LaunchRequest");
+        log("LaunchRequest", logLevels.info);
         var speechOutput = WelcomeMessage;
         var repromptSpeech = WelcomeMessage;
         var cardTitle = WelcomeMessageCardTitle;
@@ -99,29 +122,29 @@ var handlers = {
         this.emit(":askWithCard", speechOutput, repromptSpeech, cardTitle, cardContent, responseCardImages);
     },
     "SessionEndedRequest": function () {
-        console.log("SessionEndedRequest");
+        log("SessionEndedRequest", logLevels.info);
         var speechOutput = shutdownMessage;
         this.emit(":tell", speechOutput);
     },
     "SendMailIntent": function () {
-        console.log("SendMailIntent");
+        log("SendMailIntent", logLevels.info);
 
         SendMailIntent(this);
 
     },
     "AMAZON.StopIntent": function() {
-        console.log("StopIntent");
+        log("StopIntent", logLevels.info);
         var speechOutput = shutdownMessage;
         this.emit(":tell", speechOutput);
     },
     // Let the user completely exit the skill
     "AMAZON.CancelIntent": function() {
-        console.log("CancelIntent");
+        log("CancelIntent", logLevels.info);
         this.emit(":tell", shutdownMessage);
     },
     // Provide help about how to use the skill
     "AMAZON.HelpIntent": function () {
-        console.log("HelpIntent");
+        log("HelpIntent", logLevels.info);
         var speechOutput = HelpMessage;
         var repromptSpeech = HelpMessage;
         var cardTitle = HelpMessageCardTitle;
@@ -130,7 +153,7 @@ var handlers = {
     },
     // Catch everything else
     "Unhandled": function () {
-        console.log("Unhandled Intent");
+        log("Unhandled Intent", logLevels.info);
         var speechOutput = HelpMessage;
         var repromptSpeech = HelpMessage;
         this.emit(":ask", speechOutput, repromptSpeech);
@@ -143,7 +166,7 @@ function SendMailIntent(alexaResponse){
         // **
         // handle the getUser results
         .catch(function(err){
-            console.log("getUser Error: " + JSON.stringify(err));
+            log("getUser Error: " + JSON.stringify(err), logLevels.error);
         })
         .then(function(user){
             // then send a mail to the current user
@@ -152,20 +175,20 @@ function SendMailIntent(alexaResponse){
         // **
         // handle the sendMail results
         .catch(function(err){
-            console.log("sendMail Error: " + JSON.stringify(err));
+            log("sendMail Error: " + JSON.stringify(err), logLevels.error);
             alexaResponse.emit(":tell", "There was an error sending the mail");
         })
         .then(function(mail){
             // then send confirmation back to alexa
             var mailSubject = mail.Message.Subject;
-            console.log("Mail Sent: " + JSON.stringify(mail));
+            log("Mail Sent: " + JSON.stringify(mail), logLevels.debug);
             //return the results to Alexa
-            //return alexaResponse.emit(":tell", "Mail Sent to you.");
             return alexaResponse.emit(":tell", "Mail sent to you with a subject of " + mailSubject);
         })
 }
 
 function getUser(){
+    log("getUser", logLevels.debug)
     //Make a call to the Graph API
     return client
             .api("/me")
@@ -173,19 +196,21 @@ function getUser(){
 }
 
 function sendMail(user){
+    log("sendMail: " + JSON.stringify(user), logLevels.debug)
 
     return new Promise(function(resolve, reject){
 
     var destinationEmailAddress = user.userPrincipalName;
     var displayName = user.displayName;
 
+    log("sendMail: email: " + destinationEmailAddress + " name: " + displayName, logLevels.info);
     var mail = emailHelper.generateMailBody(
         displayName,
         destinationEmailAddress
     );
 
     //DEBUG: log the user
-    console.log("displayName: " + displayName + 
+    log("displayName: " + displayName + 
                 " destinationEmailAddress: " + destinationEmailAddress); 
 
     //Make a call to the Graph API
@@ -193,11 +218,11 @@ function sendMail(user){
         .api("/me/sendMail")
         .post({message: mail.Message}, (err, res) => {
             if(err){
-                console.log("sendMail Error: " + JSON.stringify(err));
+                log("sendMail Error: " + JSON.stringify(err));
                 reject(err);
             }else{
                 // log the sendMail results
-                console.log("sendMail successful: ");
+                log("sendMail successful: ");
                 // return the mail that was sent
                 resolve(mail);
             }
