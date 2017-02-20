@@ -44,6 +44,12 @@ var responseCardImages = {
     largeImageUrl: "https://raw.githubusercontent.com/PaulStubbs/nodejs-alexa-connect-sample/master/skill/AlexaGraphBotCard1200x800.png"
 };
 
+// Adding Telemetry
+// http://VoiceLabs.co
+var VoiceInsights = require('voice-insights-sdk');
+var VI_APP_TOKEN = process.env.VI_APP_TOKEN;
+
+
 // Adding logging levels
 // error -  Other runtime errors or unexpected conditions. 
 // warn -   'Almost' errors, other runtime situations that are undesirable 
@@ -165,26 +171,39 @@ function SendMailIntent(alexaResponse){
         getUser(alexaResponse)
         // **
         // handle the getUser results
-        .catch(function(err){
-            log("getUser Error: " + JSON.stringify(err), logLevels.error);
-        })
         .then(function(user){
+            //check if the user is valid
+            if(!user) throw "There is no user returned ";
+
             // then send a mail to the current user
             return sendMail(user);
         })
+        .catch(function(err){
+            log("getUser Error: " + JSON.stringify(err), logLevels.error);
+            alexaResponse.emit(":tell", "There was an error. " + err.message)
+            // re-throw the error so the chain of promises don't continue
+            throw "There was a getuser catch error: " + err.message;
+        })
+
         // **
         // handle the sendMail results
-        .catch(function(err){
-            log("sendMail Error: " + JSON.stringify(err), logLevels.error);
-            alexaResponse.emit(":tell", "There was an error sending the mail");
-        })
         .then(function(mail){
+            // check if the sendmail succeded
+            if(!mail) throw "There was an error sending mail";
+
             // then send confirmation back to alexa
             var mailSubject = mail.Message.Subject;
             log("Mail Sent: " + JSON.stringify(mail), logLevels.debug);
             //return the results to Alexa
             return alexaResponse.emit(":tell", "Mail sent to you with a subject of " + mailSubject);
         })
+        .catch(function(err){
+            log("sendMail Error: " + JSON.stringify(err), logLevels.error);
+            alexaResponse.emit(":tell", "There was an error sending the mail");
+            // re-throw the error so the chain of promises don't continue
+            throw "There was an sendmail catch error: " + err.message;
+        })
+
 }
 
 function getUser(){
