@@ -49,7 +49,6 @@ var responseCardImages = {
 var VoiceInsights = require('voice-insights-sdk');
 var VI_APP_TOKEN = process.env.VI_APP_TOKEN;
 
-
 // Adding logging levels
 // error -  Other runtime errors or unexpected conditions. 
 // warn -   'Almost' errors, other runtime situations that are undesirable 
@@ -76,6 +75,9 @@ function log(statement, logLevel) {
 
 // Entry point for Alexa
 exports.handler = function(event, context, callback) {
+
+    // Initialize Telemetry
+    VoiceInsights.initialize(event.session, VI_APP_TOKEN);
 
     // DEBUG: return all the environment varibles
     log(process.env, logLevels.debug);
@@ -113,7 +115,10 @@ exports.handler = function(event, context, callback) {
         // no token! display card and let user know they need to sign in
         log("No Auth Token", logLevels.warn);
         var speechOutput = linkAccountMessage;
-        alexa.emit(":tellWithLinkAccountCard", speechOutput);
+
+        VoiceInsights.track("NoAuthToken", null, null, (error, response) => {
+            alexa.emit(":tellWithLinkAccountCard", speechOutput);
+        });
     }
 };
 
@@ -125,12 +130,16 @@ var handlers = {
         var repromptSpeech = WelcomeMessage;
         var cardTitle = WelcomeMessageCardTitle;
         var cardContent = WelcomeMessageCard;
-        this.emit(":askWithCard", speechOutput, repromptSpeech, cardTitle, cardContent, responseCardImages);
+        VoiceInsights.track("LaunchRequest", null, null, (error, response) => {
+            this.emit(":askWithCard", speechOutput, repromptSpeech, cardTitle, cardContent, responseCardImages);
+        });
     },
     "SessionEndedRequest": function () {
         log("SessionEndedRequest", logLevels.info);
         var speechOutput = shutdownMessage;
-        this.emit(":tell", speechOutput);
+        VoiceInsights.track("SessionEndedRequest", null, null, (error, response) => {
+            this.emit(":tell", speechOutput);
+        });
     },
     "SendMailIntent": function () {
         log("SendMailIntent", logLevels.info);
@@ -141,12 +150,16 @@ var handlers = {
     "AMAZON.StopIntent": function() {
         log("StopIntent", logLevels.info);
         var speechOutput = shutdownMessage;
-        this.emit(":tell", speechOutput);
+        VoiceInsights.track("StopIntent", null, null, (error, response) => {
+            this.emit(":tell", speechOutput);
+        });
     },
     // Let the user completely exit the skill
     "AMAZON.CancelIntent": function() {
         log("CancelIntent", logLevels.info);
-        this.emit(":tell", shutdownMessage);
+        VoiceInsights.track("CancelIntent", null, null, (error, response) => {
+            this.emit(":tell", shutdownMessage);
+        });
     },
     // Provide help about how to use the skill
     "AMAZON.HelpIntent": function () {
@@ -155,14 +168,18 @@ var handlers = {
         var repromptSpeech = HelpMessage;
         var cardTitle = HelpMessageCardTitle;
         var cardContent = HelpMessageCard;
-        this.emit(":askWithCard", speechOutput, repromptSpeech, cardTitle, cardContent, responseCardImages);
+        VoiceInsights.track("HelpIntent", null, null, (error, response) => {
+           this.emit(":askWithCard", speechOutput, repromptSpeech, cardTitle, cardContent, responseCardImages);
+        });
     },
     // Catch everything else
     "Unhandled": function () {
-        log("Unhandled Intent", logLevels.info);
+        log("UnhandledIntent", logLevels.info);
         var speechOutput = HelpMessage;
         var repromptSpeech = HelpMessage;
-        this.emit(":ask", speechOutput, repromptSpeech);
+        VoiceInsights.track("UnhandledIntent", null, null, (error, response) => {
+            this.emit(":ask", speechOutput, repromptSpeech);
+        });
     }
 };
 
@@ -175,17 +192,16 @@ function SendMailIntent(alexaResponse){
             //check if the user is valid
             if(!user) throw "There is no user returned ";
 
-            // then send a mail to the current user
+            // then send a mail to the current user           
             return sendMail(user);
         })
         .catch(function(err){
             log("getUser Error: " + JSON.stringify(err), logLevels.error);
             alexaResponse.emit(":tell", "There was an error. " + err.message)
             // re-throw the error so the chain of promises don't continue
-            throw "There was a getuser catch error: " + err.message;
+            throw "There was a getuser catch error: " + JSON.stringify(err);
         })
 
-        // **
         // handle the sendMail results
         .then(function(mail){
             // check if the sendmail succeded
@@ -195,20 +211,22 @@ function SendMailIntent(alexaResponse){
             var mailSubject = mail.Message.Subject;
             log("Mail Sent: " + JSON.stringify(mail), logLevels.debug);
             //return the results to Alexa
-            return alexaResponse.emit(":tell", "Mail sent to you with a subject of " + mailSubject);
+            VoiceInsights.track("sendMailIntent", null, null, (error, response) => {
+                return alexaResponse.emit(":tell", "Mail sent to you with a subject of " + mailSubject);
+            });
         })
         .catch(function(err){
             log("sendMail Error: " + JSON.stringify(err), logLevels.error);
             alexaResponse.emit(":tell", "There was an error sending the mail");
             // re-throw the error so the chain of promises don't continue
-            throw "There was an sendmail catch error: " + err.message;
+            throw "There was an sendmail catch error: " + JSON.stringify(err);
         })
 
 }
 
 function getUser(){
     log("getUser", logLevels.debug)
-    //Make a call to the Graph API
+    //Make a call to the Graph API, this returns a Promise
     return client
             .api("/me")
             .get();
@@ -243,7 +261,9 @@ function sendMail(user){
                 // log the sendMail results
                 log("sendMail successful: ");
                 // return the mail that was sent
-                resolve(mail);
+                VoiceInsights.track("getUser", null, JSON.stringify(user), (error, response) => {
+                    resolve(mail);
+                });
             }
     });
 
