@@ -167,7 +167,7 @@ Here is what the fields will look like when they are filled in.
 
 Enter the following values for the **Interaction Model** section:
 
-1. Enter the Intent Schema. The Intent Schema defines the intents, or functions, that your skill supports. In the case of this sample there is only one intent called the sendMailIntent. Enter the follow text into the **Intent SChema** field. You can also find the intent schema text file in the source code for this sample located in the /speechAssets/intents.json file.
+1. Enter the Intent Schema. The Intent Schema defines the intents, or functions, that your skill supports. In the case of this sample there is only one intent called the sendMailIntent. Enter the follow text into the **Intent SChema** field. You can also find the intent schema text file in the source code for this sample located in the /skill/intents_en_US.json file.
 
 ```JSON
 {
@@ -183,7 +183,7 @@ Here is what the field will look like when is is filled in.
 <img src="./readme-images/Interaction_Model_Intent.jpg" alt="Alexa Skill Interaction Model Page" width="820" height="270">
 
 2. There are no **Custom Slot Types**.
-3. Enter the Sample Utterances. The Sample Utterances are examples of what the user will say to invoke your skill. These are used to train the Amazon Voice Services (AVS) to map the utterance to the intent. Enter the follow text inthe the **Sample Utterance** field. You can also find the sample utterances text file in the source code for this sample located in the /speechAssets/Utterances.txt.
+3. Enter the Sample Utterances. The Sample Utterances are examples of what the user will say to invoke your skill. These are used to train the Amazon Voice Services (AVS) to map the utterance to the intent. Enter the follow text inthe the **Sample Utterance** field. You can also find the sample utterances text file in the source code for this sample located in the /skill/Utterances_en_US.txt.
 
 ```
 SendMailIntent send mail

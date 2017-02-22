@@ -1,0 +1,5 @@
+SendMailIntent send mail
+SendMailIntent send me mail
+SendMailIntent send mail to myself
+SendMailIntent send a test message
+SendMailIntent send a test message to myself
