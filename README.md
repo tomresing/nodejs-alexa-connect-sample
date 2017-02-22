@@ -46,7 +46,7 @@ In this sample, the bot is written in Node.js. To prepare the code package for d
 3. Optionally, you can open the sample solution in [Visual Studio Code](https://code.visualstudio.com/) to understand the how the bot works. Visual Studio Code can be used on either Windows or a Mac. Run the following command from the terminal or command window. Note the period at the end.
 
 	```
-	code .
+	code .
 	```
 	
 4. Prepare the node package for deployment by zipping the source files. On the Mac using the terminal, run the following command from the folder containing the index.js. On Windows use the File Explorer content menu to send to a compressed folder.
@@ -60,7 +60,7 @@ In this sample, the bot is written in Node.js. To prepare the code package for d
 	
 In the [Deploy the Skill](#deploy) section you will learn how to deploy this node zip package to a hosting provider, like AWS Lambda.
 
-####Code Highlights#### 
+####Code Highlights
 
 - The main skill code is located in the index.js file. This contains the main entry point which is called from the Echo device. In addition to passing the intent and the slot values, the OAuth 2 bearer token will also be passed to your code on every intent. Later in the [Create the Alexa custom skill](#createSkill) section you will link the skill with Active Directory. Once the account is linked and authenticated, the bearer token will be passed on every call; you only need to provide it to the Microsoft Graph JavaScript library to make calls on the Graph.
 
